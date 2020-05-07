@@ -7,19 +7,30 @@ class Bird {
     this.y = props.y;
     this.speed = 0;
     this.gravity = 0.30;
-    this.jump = 4.6;
+    this.flap = 4.6;
+    this.rotation = 0;
   }
 
   draw() {
-    ctx.drawImage(this.image, this.x - this.width / 2, this.y - this.height / 2);
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+    ctx.drawImage(this.image, - this.width / 2, - this.height / 2);
+    ctx.restore();
   }
 
   update() {
     this.speed += this.gravity;
     this.y += this.speed;
+
+    if (this.speed >= this.flap) {
+      this.rotation = 70 * DEGREE;
+    } else {
+      this.rotation = -25 * DEGREE;
+    }
   }
 
   flapWings() {
-    this.speed = -this.jump;
+    this.speed = -this.flap;
   }
 }

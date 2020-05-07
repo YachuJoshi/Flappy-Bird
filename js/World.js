@@ -1,12 +1,13 @@
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
 const pipeGap = 355;
 let frames = 0;
 let isGameActive = true;
 let gameInterval;
 let score = 0;
 
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
+const DEGREE = Math.PI / 180;
 const scoreContainer = document.querySelector('.score');
 const scoreBoard = document.querySelector('.score-count');
 const startButton = document.querySelector('.btn-start');
