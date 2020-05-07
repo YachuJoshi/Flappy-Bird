@@ -1,20 +1,8 @@
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
 const pipeGap = 355;
 let frames = 0;
 let isGameActive = true;
 let gameInterval;
 let score = 0;
-const scoreContainer = document.querySelector('.score');
-const scoreBoard = document.querySelector('.score-count');
-const startButton = document.querySelector('.btn-start');
-const coverImage = document.querySelector('.cover-image');
-const flappyBirdText = document.querySelector('.flappy-bird-text');
-const createdBy = document.querySelector('.created-by');
-scoreContainer.classList.add('hide');
-startButton.classList.add('hide');
-const playButton = document.querySelector('.btn-play');
-
 
 const birdImage = new Image();
 birdImage.src = './images/bird.png';
@@ -129,7 +117,7 @@ function update() {
     topPipe.update();
     bottomPipe.update();
 
-    //COLLISION DETECTION
+    //COLLISION DETECTION: TOP PIPE
     if (bird.x + bird.width / 2 > topPipe.x &&
       bird.x - bird.width / 2 < topPipe.x + topPipe.width &&
       bird.y - bird.height / 2 < topPipe.y + topPipe.height &&
@@ -142,6 +130,7 @@ function update() {
       stopGame();
     }
 
+    //COLLISION DETECTION: BOTTOM PIPE
     if ((bird.x + bird.width / 2 > bottomPipe.x &&
       bird.x - bird.width / 2 < bottomPipe.x + bottomPipe.width &&
       bird.y - bird.height / 2 < bottomPipe.y + bottomPipe.height &&
@@ -154,6 +143,7 @@ function update() {
       stopGame();
     }
 
+    //BETWEEN PIPES
     if (bird.x - bird.width / 2 > topPipe.x &&
       bird.x + bird.width / 2 < topPipe.x + topPipe.width &&
       bird.y - bird.height / 2 > topPipe.y + topPipe.height &&
@@ -221,18 +211,4 @@ function startGame() {
   }
 }
 
-playButton.addEventListener('click', () => {
-  draw();
-  isGameActive = true;
-  startGame();
-  toggleClassList();
-});
-
-startButton.addEventListener('click', () => {
-  reset();
-  isGameActive = true;
-  startGame();
-});
-
-canvas.addEventListener('click', birdAction);
 canvas.addEventListener('mousedown', function (e) { e.preventDefault(); }, false);
