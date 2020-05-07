@@ -37,12 +37,12 @@ let pipes = [];
 pipes.push({
   topPipe: new Pipe({
     image: topPipeImage,
-    x: canvas.width - 54,
+    x: canvas.width + 54,
     y: -120 * Math.random() * 1
   }),
   bottomPipe: new Pipe({
     image: bottomPipeImage,
-    x: canvas.width - 54,
+    x: canvas.width + 54,
     y: -120 * Math.random() * 1 + pipeGap
   })
 });
@@ -95,12 +95,12 @@ function draw() {
     pipes.push({
       topPipe: new Pipe({
         image: topPipeImage,
-        x: canvas.width - 54,
+        x: canvas.width + 54,
         y: -150 * Math.random() * 1
       }),
       bottomPipe: new Pipe({
         image: bottomPipeImage,
-        x: canvas.width - 54,
+        x: canvas.width + 54,
         y: -150 * Math.random() * 1 + pipeGap
       })
     });
@@ -179,17 +179,18 @@ function stopGame() {
 }
 
 function reset() {
+  frames = 0;
   score = 0;
   pipes = [];
   pipes.push({
     topPipe: new Pipe({
       image: topPipeImage,
-      x: 16,
+      x: canvas.width + 54,
       y: -120 * Math.random() * 1
     }),
     bottomPipe: new Pipe({
       image: bottomPipeImage,
-      x: 16,
+      x: canvas.width + 54,
       y: -120 * Math.random() * 1 + pipeGap
     })
   });
