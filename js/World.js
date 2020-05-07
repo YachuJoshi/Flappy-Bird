@@ -88,7 +88,7 @@ function draw() {
     bottomPipe.draw();
   }
   bird.draw();
-  foreground.draw();
+  foreground.draw('foreground');
   scoreBoard.textContent = Math.round(score);
   if (frames % 180 === 0) {
     pipes.push({

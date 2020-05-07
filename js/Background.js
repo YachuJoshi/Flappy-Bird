@@ -7,12 +7,20 @@ class Background {
     this.y = props.y;
     this.dx = 1.4;
   }
-  draw() {
-    ctx.drawImage(this.image, this.x, this.y);
-    ctx.drawImage(this.image, this.x + this.width, this.y);
+
+  draw(status) {
+    if (status === 'foreground') {
+      ctx.drawImage(this.image, this.x, this.y);
+      return;
+    }
+    for (var w = 0; w < canvas.width; w += this.width) {
+      for (var h = 0; h < canvas.height; h += this.height) {
+        ctx.drawImage(this.image, w, h);
+      }
+    }
   }
 
   update() {
-    this.x = (this.x - this.dx) % (this.width / 2);
+    this.x = (this.x - this.dx) % 1;
   }
 }

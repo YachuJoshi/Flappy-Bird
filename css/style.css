@@ -30,8 +30,8 @@ canvas {
   top: 2px;
   left: 50%;
   transform: translateX(-50%);
-  height: 518px;
-  width: 342px;
+  height: 517.8px;
+  width: 306px;
   background-image: url(../images/bg.png);
   background-repeat: repeat-x;
   background-size: cover;
@@ -40,15 +40,13 @@ canvas {
 .flappy-bird-text {
   display: block;
   position: absolute;
-  height: 75px;
-  width: 270px;
+  height: 62px;
+  width: 250px;
   z-index: 100;
   top: 28%;
   left: 50%;
   transform: translateX(-50%);
 }
-
-
 
 p {
   display: inline-block;
@@ -91,7 +89,7 @@ p.center {
   cursor: pointer;
   display: block;
   position: absolute;
-  bottom: 170px;
+  bottom: 140px;
   left: 50%;
   transform: translateX(-50%);
   border-radius: 150px;
