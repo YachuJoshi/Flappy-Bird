@@ -4,6 +4,19 @@ let isGameActive = true;
 let gameInterval;
 let score = 0;
 
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+const scoreContainer = document.querySelector('.score');
+const scoreBoard = document.querySelector('.score-count');
+const startButton = document.querySelector('.btn-start');
+const coverImage = document.querySelector('.cover-image');
+const flappyBirdText = document.querySelector('.flappy-bird-text');
+const createdBy = document.querySelector('.created-by');
+scoreContainer.classList.add('hide');
+startButton.classList.add('hide');
+const playButton = document.querySelector('.btn-play');
+
 const birdImage = new Image();
 birdImage.src = './images/bird.png';
 
@@ -167,6 +180,18 @@ function stopGame() {
 function reset() {
   score = 0;
   pipes = [];
+  pipes.push({
+    topPipe: new Pipe({
+      image: topPipeImage,
+      x: 16,
+      y: -120 * Math.random() * 1
+    }),
+    bottomPipe: new Pipe({
+      image: bottomPipeImage,
+      x: 16,
+      y: -120 * Math.random() * 1 + pipeGap
+    })
+  });
   canvas.addEventListener('click', birdAction);
   bird = new Bird({
     image: birdImage,
@@ -211,4 +236,18 @@ function startGame() {
   }
 }
 
+playButton.addEventListener('click', () => {
+  draw();
+  isGameActive = true;
+  startGame();
+  toggleClassList();
+});
+
+startButton.addEventListener('click', () => {
+  reset();
+  isGameActive = true;
+  startGame();
+});
+
+canvas.addEventListener('click', birdAction);
 canvas.addEventListener('mousedown', function (e) { e.preventDefault(); }, false);
