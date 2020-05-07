@@ -24,7 +24,7 @@ class Bird {
     this.y += this.speed;
 
     if (this.speed >= this.flap) {
-      this.rotation = 70 * DEGREE;
+      this.rotation = 90 * DEGREE;
     } else {
       this.rotation = -25 * DEGREE;
     }
