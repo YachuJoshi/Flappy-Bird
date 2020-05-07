@@ -5,9 +5,9 @@ class Bird {
     this.width = 38;
     this.x = props.x;
     this.y = props.y;
-    this.dx = 1.4;
-    this.gravity = 2;
-    this.flap = 60;
+    this.speed = 0;
+    this.gravity = 0.30;
+    this.jump = 4.6;
   }
 
   draw() {
@@ -15,15 +15,11 @@ class Bird {
   }
 
   update() {
-    this.y += this.gravity;
+    this.speed += this.gravity;
+    this.y += this.speed;
   }
 
   flapWings() {
-    this.y -= this.flap;
-  }
-
-  fallToGround() {
-    this.y += 20;
-    if (this.y >= 410) return;
+    this.speed = -this.jump;
   }
 }

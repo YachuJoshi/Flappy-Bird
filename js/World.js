@@ -135,7 +135,6 @@ function update() {
       bird.y - bird.height / 2 < topPipe.y + topPipe.height &&
       bird.y + bird.height / 2 > topPipe.y) {
       hit.play();
-      bird.fallToGround();
       setTimeout(() => {
         showGameOverScreen();
         die.play();
@@ -148,7 +147,6 @@ function update() {
       bird.y - bird.height / 2 < bottomPipe.y + bottomPipe.height &&
       bird.y + bird.height / 2 > bottomPipe.y) || bird.y + bird.height / 2 > foreground.y) {
       hit.play();
-      bird.fallToGround();
       setTimeout(() => {
         showGameOverScreen();
         die.play();
