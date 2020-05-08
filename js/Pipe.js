@@ -5,7 +5,7 @@ class Pipe {
     this.width = 52;
     this.x = props.x;
     this.y = props.y;
-    this.dx = 1.4;
+    this.dx = 2.8;
   }
 
   draw() {

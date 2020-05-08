@@ -5,7 +5,6 @@ class Background {
     this.width = 286;
     this.x = props.x;
     this.y = props.y;
-    this.dx = 1.4;
   }
 
   draw(status) {
@@ -18,9 +17,5 @@ class Background {
         ctx.drawImage(this.image, w, h);
       }
     }
-  }
-
-  update() {
-    this.x = (this.x - this.dx) % 1;
   }
 }

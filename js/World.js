@@ -2,10 +2,11 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const pipeGap = 355;
+let pipes = [];
+let bird, background, foreground, gameInterval;
 let frames = 0;
-let isGameActive = true;
-let gameInterval;
 let score = 0;
+let isGameActive = true;
 
 const DEGREE = Math.PI / 180;
 const scoreContainer = document.querySelector('.score');
@@ -18,8 +19,16 @@ scoreContainer.classList.add('hide');
 startButton.classList.add('hide');
 const playButton = document.querySelector('.btn-play');
 
-const birdImage = new Image();
-birdImage.src = './images/bird.png';
+const downFlapBird = new Image();
+downFlapBird.src = './images/downflap.png';
+
+const midFlapBird = new Image();
+midFlapBird.src = './images/midflap.png';
+
+const upFlapBird = new Image();
+upFlapBird.src = './images/upflap.png';
+
+const birdFlapArray = [upFlapBird, midFlapBird, downFlapBird, upFlapBird];
 
 const topPipeImage = new Image();
 topPipeImage.src = './images/pipeTop.png';
@@ -33,20 +42,6 @@ foregroundImage.src = './images/fg.png';
 const backgroundImage = new Image();
 backgroundImage.src = './images/bg.png';
 
-let pipes = [];
-pipes.push({
-  topPipe: new Pipe({
-    image: topPipeImage,
-    x: canvas.width + 54,
-    y: -120 * Math.random() * 1
-  }),
-  bottomPipe: new Pipe({
-    image: bottomPipeImage,
-    x: canvas.width + 54,
-    y: -120 * Math.random() * 1 + pipeGap
-  })
-});
-
 const flap = new Audio();
 flap.src = './sounds/flap.mp3';
 
@@ -58,54 +53,6 @@ scoreSound.src = './sounds/score.mp3';
 
 const die = new Audio();
 die.src = './sounds/die.wav';
-
-let bird = new Bird({
-  image: birdImage,
-  x: 100,
-  y: 200
-});
-
-let background = new Background({
-  image: backgroundImage,
-  x: 0,
-  y: 0
-});
-
-let foreground = new Background({
-  image: foregroundImage,
-  x: 0,
-  y: 410
-});
-
-function draw() {
-  frames++;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  background.draw();
-  for (let i = 0; i < pipes.length; i++) {
-    let topPipe = pipes[i].topPipe;
-    let bottomPipe = pipes[i].bottomPipe;
-    bottomPipe.y = topPipe.y + pipeGap;
-    topPipe.draw();
-    bottomPipe.draw();
-  }
-  bird.draw();
-  foreground.draw('foreground');
-  scoreBoard.textContent = Math.round(score);
-  if (frames % 180 === 0) {
-    pipes.push({
-      topPipe: new Pipe({
-        image: topPipeImage,
-        x: canvas.width + 54,
-        y: -150 * Math.random() * 1
-      }),
-      bottomPipe: new Pipe({
-        image: bottomPipeImage,
-        x: canvas.width + 54,
-        y: -150 * Math.random() * 1 + pipeGap
-      })
-    });
-  }
-}
 
 function removePipes() {
   for (let i = 0; i < pipes.length; i++) {
@@ -121,6 +68,35 @@ function showGameOverScreen() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   scoreContainer.classList.add('center');
   startButton.classList.remove('hide');
+}
+
+function draw() {
+  frames++;
+  background.draw();
+  for (let i = 0; i < pipes.length; i++) {
+    let topPipe = pipes[i].topPipe;
+    let bottomPipe = pipes[i].bottomPipe;
+    bottomPipe.y = topPipe.y + pipeGap;
+    topPipe.draw();
+    bottomPipe.draw();
+  }
+  bird.draw();
+  foreground.draw('foreground');
+  scoreBoard.textContent = Math.round(score);
+  if (frames % 100 === 0) {
+    pipes.push({
+      topPipe: new Pipe({
+        image: topPipeImage,
+        x: canvas.width + 54,
+        y: -150 * Math.random() * 1
+      }),
+      bottomPipe: new Pipe({
+        image: bottomPipeImage,
+        x: canvas.width + 54,
+        y: -150 * Math.random() * 1 + pipeGap
+      })
+    });
+  }
 }
 
 function update() {
@@ -163,11 +139,9 @@ function update() {
       bird.y - bird.height / 2 > topPipe.y + topPipe.height &&
       bird.y + bird.height / 2 < bottomPipe.y) {
       scoreSound.play();
-      score += 0.1;
+      score += 0.2;
     }
   }
-  background.update();
-  foreground.update();
   removePipes();
 }
 
@@ -196,7 +170,7 @@ function reset() {
   });
   canvas.addEventListener('click', birdAction);
   bird = new Bird({
-    image: birdImage,
+    imageArray: birdFlapArray,
     x: 100,
     y: 200
   });
@@ -239,7 +213,7 @@ function startGame() {
 }
 
 playButton.addEventListener('click', () => {
-  draw();
+  reset();
   isGameActive = true;
   startGame();
   toggleClassList();
