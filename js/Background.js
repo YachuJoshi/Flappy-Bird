@@ -12,8 +12,8 @@ class Background {
       ctx.drawImage(this.image, this.x, this.y);
       return;
     }
-    for (var w = 0; w < canvas.width; w += this.width) {
-      for (var h = 0; h < canvas.height; h += this.height) {
+    for (let w = 0; w < canvas.width; w += this.width) {
+      for (let h = 0; h < canvas.height; h += this.height) {
         ctx.drawImage(this.image, w, h);
       }
     }

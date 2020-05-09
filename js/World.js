@@ -1,73 +1,45 @@
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
-const pipeGap = 355;
-let pipes = [];
-let bird, background, foreground, gameInterval;
-let frames = 0;
-let score = 0;
-let isGameActive = true;
-
-const DEGREE = Math.PI / 180;
-const scoreContainer = document.querySelector('.score');
-const scoreBoard = document.querySelector('.score-count');
-const startButton = document.querySelector('.btn-start');
-const coverImage = document.querySelector('.cover-image');
-const flappyBirdText = document.querySelector('.flappy-bird-text');
-const createdBy = document.querySelector('.created-by');
-scoreContainer.classList.add('hide');
-startButton.classList.add('hide');
-const playButton = document.querySelector('.btn-play');
-
-const downFlapBird = new Image();
-downFlapBird.src = './images/downflap.png';
-
-const midFlapBird = new Image();
-midFlapBird.src = './images/midflap.png';
-
-const upFlapBird = new Image();
-upFlapBird.src = './images/upflap.png';
-
-const birdFlapArray = [upFlapBird, midFlapBird, downFlapBird, upFlapBird];
-
-const topPipeImage = new Image();
-topPipeImage.src = './images/pipeTop.png';
-
-const bottomPipeImage = new Image();
-bottomPipeImage.src = './images/pipeBottom.png';
-
-const foregroundImage = new Image();
-foregroundImage.src = './images/fg.png';
-
-const backgroundImage = new Image();
-backgroundImage.src = './images/bg.png';
-
-const flap = new Audio();
-flap.src = './sounds/flap.mp3';
-
-const hit = new Audio();
-hit.src = './sounds/hit.wav';
-
-const scoreSound = new Audio();
-scoreSound.src = './sounds/score.mp3';
-
-const die = new Audio();
-die.src = './sounds/die.wav';
-
-function removePipes() {
-  for (let i = 0; i < pipes.length; i++) {
-    let topPipe = pipes[i].topPipe;
-    if (topPipe.x + 52 < 0) {
-      pipes.shift();
-    }
-  }
+function init() {
+  isGameActive = true;
+  canvas.addEventListener('click', birdAction);
+  canvas.addEventListener('mousedown', e => e.preventDefault(), false);
+  playButton.classList.add('hide');
 }
 
-function showGameOverScreen() {
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  scoreContainer.classList.add('center');
-  startButton.classList.remove('hide');
+function reset() {
+  frames = 0;
+  score = 0;
+  pipes = [];
+  pipes.push({
+    topPipe: new Pipe({
+      image: topPipeImage,
+      x: canvas.width + 54,
+      y: -120 * Math.random() * 1
+    }),
+    bottomPipe: new Pipe({
+      image: bottomPipeImage,
+      x: canvas.width + 54,
+      y: -120 * Math.random() * 1 + pipeGap
+    })
+  });
+  bird = new Bird({
+    imageArray: birdFlapArray,
+    x: 100,
+    y: 200
+  });
+
+  background = new Background({
+    image: backgroundImage,
+    x: 0,
+    y: 0
+  });
+
+  foreground = new Background({
+    image: foregroundImage,
+    x: 0,
+    y: 410
+  });
+  scoreContainer.classList.remove('center');
+  startButton.classList.add('hide');
 }
 
 function draw() {
@@ -82,7 +54,7 @@ function draw() {
   }
   bird.draw();
   foreground.draw('foreground');
-  scoreBoard.textContent = Math.round(score);
+  scoreContainer.textContent = `SCORE: ${Math.round(score)}`;
   if (frames % 100 === 0) {
     pipes.push({
       topPipe: new Pipe({
@@ -142,88 +114,33 @@ function update() {
       score += 0.2;
     }
   }
-  removePipes();
-}
-
-function stopGame() {
-  isGameActive = false;
-  playButton.classList.add('hide');
-  canvas.removeEventListener('click', birdAction);
-  cancelAnimationFrame(gameInterval);
-}
-
-function reset() {
-  frames = 0;
-  score = 0;
-  pipes = [];
-  pipes.push({
-    topPipe: new Pipe({
-      image: topPipeImage,
-      x: canvas.width + 54,
-      y: -120 * Math.random() * 1
-    }),
-    bottomPipe: new Pipe({
-      image: bottomPipeImage,
-      x: canvas.width + 54,
-      y: -120 * Math.random() * 1 + pipeGap
-    })
-  });
-  canvas.addEventListener('click', birdAction);
-  bird = new Bird({
-    imageArray: birdFlapArray,
-    x: 100,
-    y: 200
-  });
-
-  background = new Background({
-    image: backgroundImage,
-    x: 0,
-    y: 0
-  });
-
-  foreground = new Background({
-    image: foregroundImage,
-    x: 0,
-    y: 410
-  });
-  scoreContainer.classList.remove('center');
-  startButton.classList.add('hide');
-}
-
-const birdAction = () => {
-  bird.flapWings();
-  flap.play();
-}
-
-function toggleClassList() {
-  playButton.classList.add('hide');
-  coverImage.classList.add('hide');
-  flappyBirdText.classList.add('hide');
-  scoreContainer.classList.remove('hide');
-  createdBy.classList.add('hide');
+  removePipesOutOfBound();
 }
 
 function startGame() {
   draw();
   update();
-  startButton.classList.add('hide');
   if (isGameActive) {
     gameInterval = requestAnimationFrame(startGame);
   }
 }
 
+function stopGame() {
+  isGameActive = false;
+  canvas.removeEventListener('click', birdAction);
+  cancelAnimationFrame(gameInterval);
+}
+
 playButton.addEventListener('click', () => {
   reset();
-  isGameActive = true;
-  startGame();
   toggleClassList();
+  init();
+  startGame();
 });
 
 startButton.addEventListener('click', () => {
   reset();
-  isGameActive = true;
+  init();
+  startButton.classList.add('hide');
   startGame();
 });
-
-canvas.addEventListener('click', birdAction);
-canvas.addEventListener('mousedown', function (e) { e.preventDefault(); }, false);
